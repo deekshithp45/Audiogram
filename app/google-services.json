@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "221645509760",
+    "firebase_url": "https://audiogram-2ad90.firebaseio.com",
+    "project_id": "audiogram-2ad90",
+    "storage_bucket": "audiogram-2ad90.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221645509760:android:e67ce6973fb83827",
+        "android_client_info": {
+          "package_name": "com.agnt45.audiogram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221645509760-3qfbin5rntqk9qao4p89s61n750n49lm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.agnt45.audiogram",
+            "certificate_hash": "2ee5a5cd53c31d18408ae64b2ad76d04b7bd9302"
+          }
+        },
+        {
+          "client_id": "221645509760-r8m11epj39anis6483cbp44ntn5lh63f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1dnPAC6W9TAhHocF4sIZfSgcwiiGHN_8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "221645509760-r8m11epj39anis6483cbp44ntn5lh63f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

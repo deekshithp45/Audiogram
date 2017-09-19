@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.agnt45.audiogram.SettingsActivity"
+    android:background="@color/colorPrimaryDark">
+    <include layout="@layout/app_bar_layout" android:id="@+id/setting_bar"
+        />
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/profile_default_pic"
+        android:clickable="true"
+        app:civ_border_width="2dp" />
+
+    <TextView
+        android:id="@+id/Disp_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="DISPLAY NAME"
+        android:textColor="#ffffff"
+
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/Disp_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Disp_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:text="Hi,I am Using AudioGram"
+        android:textColor="#ffffff"
+        android:textSize="20dp"
+        tools:layout_width="match_parent"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/change_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Disp_status"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp"
+        android:text="CHANGE IMAGE"
+        android:backgroundTint="#ffffff"
+        android:textColor="@color/colorPrimary"/>
+
+    <Button
+        android:id="@+id/change_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/change_image"
+        android:layout_alignStart="@+id/change_image"
+        android:layout_below="@+id/change_image"
+        android:layout_marginTop="23dp"
+        android:text="CHANGE STATUS"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/colorAccent"/>
+
+</RelativeLayout>
