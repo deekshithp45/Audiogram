@@ -8,6 +8,7 @@
     android:background="@color/colorPrimaryDark">
     <include layout="@layout/app_bar_layout" android:id="@+id/setting_bar"
         />
+
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
         android:layout_width="200dp"
@@ -15,8 +16,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
-        android:src="@drawable/profile_default_pic"
         android:clickable="true"
+        android:src="@drawable/profile_default_pic"
         app:civ_border_width="2dp" />
 
     <TextView
