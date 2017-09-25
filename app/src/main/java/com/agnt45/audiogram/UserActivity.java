@@ -23,10 +23,14 @@ public class UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+        Intent profile = this.getIntent();
+        String ref = profile.getStringExtra("ref:");
         name = (TextView) findViewById(R.id.User_name);
         status =(TextView) findViewById(R.id.User_status);
         un_follow = (Button) findViewById(R.id.Follow);
         posts = (Button) findViewById(R.id.posts);
+
+
 
         dp.setOnClickListener(new View.OnClickListener() {
             @Override

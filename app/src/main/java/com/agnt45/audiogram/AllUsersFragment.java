@@ -2,6 +2,7 @@ package com.agnt45.audiogram;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,7 @@ public class AllUsersFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
+
         return view;
 
 
@@ -59,10 +61,21 @@ public class AllUsersFragment extends Fragment {
                 userViewHolder.setName(users.getName());
                 userViewHolder.setStatus(users.getStatus());
                 userViewHolder.setThumbimage(users.getThumbnail_image());
+                final String user_id = getRef(i).getKey();
+                userViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent porfileIntent = new Intent(getActivity(),UserActivity.class);
+                        porfileIntent.putExtra("ref:",user_id);
+                        startActivity(porfileIntent);
+
+                    }
+                });
 
             }
         };
         recyclerView.setAdapter(firebaseRecyclerAdapter);
     }
+
 
 }
