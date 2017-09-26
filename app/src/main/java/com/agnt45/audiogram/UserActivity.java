@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,25 +23,30 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserActivity extends AppCompatActivity {
     private CircleImageView dp;
-    private TextView name,status,friendCount,mutualfriendCount;
-    private Button un_follow,posts;
+    private TextView name, status, friendCount, mutualfriendCount;
+    private Button un_follow, posts;
     private String dpUrl;
-    private DatabaseReference databaseReference,frienddatabaseReference;
+    private DatabaseReference databaseReference, frienddatabaseReference,userFriendsdatabaseReference;
     private Toolbar toolbar;
     private FirebaseUser firebaseUser;
+    private String ref;
+    private String current_State = "NOT FOLLOWING";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         Intent profile = this.getIntent();
-        final String ref = profile.getStringExtra("ref:");
+        ref = profile.getStringExtra("ref:");
         name = (TextView) findViewById(R.id.User_name);
-        status =(TextView) findViewById(R.id.User_status);
+        status = (TextView) findViewById(R.id.User_status);
         un_follow = (Button) findViewById(R.id.Follow);
         posts = (Button) findViewById(R.id.posts);
         dp = (CircleImageView) findViewById(R.id.pic_User);
@@ -48,9 +54,13 @@ public class UserActivity extends AppCompatActivity {
         friendCount = (TextView) findViewById(R.id.FriendsCount);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(ref);
+        databaseReference.keepSynced(true);
         showUser(databaseReference);
+        userFriendsdatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        userFriendsdatabaseReference.keepSynced(true);
         mutualfriendCount = (TextView) findViewById(R.id.MutualFriendsCount);
         frienddatabaseReference = FirebaseDatabase.getInstance().getReference();
+        frienddatabaseReference.keepSynced(true);
 
 
         setSupportActionBar(toolbar);
@@ -60,15 +70,10 @@ public class UserActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent back = new Intent(UserActivity.this,HomeActivity.class);
+                Intent back = new Intent(UserActivity.this, HomeActivity.class);
                 startActivity(back);
             }
         });
-
-
-
-
-
 
 
         dp.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +89,7 @@ public class UserActivity extends AppCompatActivity {
         posts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent posts = new Intent(UserActivity.this,PostsActivity.class);
+                Intent posts = new Intent(UserActivity.this, PostsActivity.class);
                 startActivity(posts);
                 finish();
             }
@@ -92,36 +97,116 @@ public class UserActivity extends AppCompatActivity {
         un_follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                frienddatabaseReference.child("Users").child(firebaseUser.getUid()).child("Friends").child(ref).child("Request_Status").setValue("SENT").addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            databaseReference.child("Friends").child(ref).child("Request_Status").setValue("RECIEVED").addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        un_follow.setText("REQUEST SENT");                                    }
-                                }
-                            });
+                un_follow.setEnabled(false);
+                if(current_State.equals("NOT FOLLOWING")) {
+                    frienddatabaseReference.child("Friends").
+                            child(firebaseUser.getUid()).child(ref).child("Friend_status")
+                            .setValue("SENT").addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                frienddatabaseReference.child("Friends").child(ref)
+                                        .child(firebaseUser.getUid()).child("Friend_status").setValue("RECIEVED").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            un_follow.setEnabled(true);
+                                            un_follow.setText("WANT TO CANCEL IT OR WAIT FOR REPLY");
+                                            current_State = "SENT";
+                                        }
+                                    }
+                                });
+                            }
                         }
-                    }
-                });
+                    });
+
+                }
+                else if(current_State.equals("SENT")||current_State.equals("ACCEPTED")){
+                    frienddatabaseReference.child("Friends").child(firebaseUser.getUid()).child(ref).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                frienddatabaseReference.child("Friends").child(ref).child(firebaseUser.getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            if(current_State.equals("ACCEPTED")){
+                                                userFriendsdatabaseReference.child(firebaseUser.getUid()).child("friendsList").child(ref).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if(task.isSuccessful()){
+                                                            userFriendsdatabaseReference.child(ref).child("friendsList").child(firebaseUser.getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    if(task.isSuccessful()){
+                                                                        current_State="NOT FOLLOWING";
+                                                                        un_follow.setEnabled(true);
+                                                                        un_follow.setText("FOLLOW");
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
 
 
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+                else if(current_State.equals("REQUEST RECIEVED")){
+                    frienddatabaseReference.child("Friends").child(firebaseUser.getUid()).child(ref).child("Friend_status").setValue("ACCEPTED").addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                frienddatabaseReference.child("Friends").child(ref).child(firebaseUser.getUid()).child("Friend_status").setValue("ACCEPTED").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
 
+                                        final String TimeStamp = DateFormat.getDateTimeInstance().format(new Date());
+                                        userFriendsdatabaseReference.child(firebaseUser.getUid()).child("friendsList").child(ref).setValue(TimeStamp).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    userFriendsdatabaseReference.child(ref).child("friendsList").child(firebaseUser.getUid()).setValue(TimeStamp).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            current_State="ACCEPTED";
+                                                            un_follow.setEnabled(true);
+                                                            un_follow.setText("UNFOLLOW");
 
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
             }
         });
+
     }
 
-    private void showUser(DatabaseReference databaseReference) {
+
+
+
+    private void showUser(final DatabaseReference databaseReference) {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String Name = dataSnapshot.child("name").getValue().toString();
                 String Status = dataSnapshot.child("status").getValue().toString();
                 String Image = dataSnapshot.child("image").getValue().toString();
-
+                chk(frienddatabaseReference);
 
                 setData(Name,Status,Image);
 
@@ -132,6 +217,34 @@ public class UserActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void chk(DatabaseReference frienddatabaseReference) {
+        this.frienddatabaseReference.child("Friends").child(firebaseUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChild(ref)) {
+                            String fstat = dataSnapshot.child(ref).child("Friend_status").getValue().toString();
+                            if (fstat.equals("SENT")) {
+                                un_follow.setText("WANT TO CANCEL IT OR WAIT FOR REPLY");
+                                current_State = "SENT";
+                            } else if (fstat.equals("ACCEPTED")) {
+                                un_follow.setText("UN_FOLLOW");
+                                current_State = "ACCEPTED";
+
+                            } else if (fstat.equals("RECIEVED")) {
+                                un_follow.setText("ACCEPT FOLLOW REQUEST");
+                                current_State = "REQUEST RECIEVED";
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void setData(String Name, String Status, String Image) {

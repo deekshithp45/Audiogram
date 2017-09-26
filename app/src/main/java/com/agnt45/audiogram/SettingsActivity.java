@@ -81,6 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         mcurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mUserreference = FirebaseDatabase.getInstance().getReference().child("Users").child(mcurrentUser.getUid());
+        mUserreference.keepSynced(true);
         viewData(mUserreference);
         changeStatus.setOnClickListener(new View.OnClickListener() {
             @Override

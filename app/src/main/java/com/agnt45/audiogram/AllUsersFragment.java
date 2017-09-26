@@ -40,6 +40,7 @@ public class AllUsersFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_all_users, container, false);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        databaseReference.keepSynced(true);
         recyclerView = (RecyclerView) view.findViewById(R.id.user_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));

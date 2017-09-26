@@ -49,6 +49,7 @@ public class StatusActivity extends AppCompatActivity {
         });
         mcurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mUserreference = FirebaseDatabase.getInstance().getReference().child("Users").child(mcurrentUser.getUid());
+        mUserreference.keepSynced(true);
         mUserreference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
