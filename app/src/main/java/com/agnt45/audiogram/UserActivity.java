@@ -56,6 +56,11 @@ public class UserActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(ref);
         databaseReference.keepSynced(true);
         showUser(databaseReference);
+        if(firebaseUser.getUid().equals(ref)){
+
+            un_follow.setVisibility(View.INVISIBLE);
+            un_follow.setEnabled(false);
+        }
         userFriendsdatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
         userFriendsdatabaseReference.keepSynced(true);
         mutualfriendCount = (TextView) findViewById(R.id.MutualFriendsCount);
@@ -72,6 +77,7 @@ public class UserActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent back = new Intent(UserActivity.this, HomeActivity.class);
                 startActivity(back);
+                finish();
             }
         });
 
@@ -90,6 +96,7 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent posts = new Intent(UserActivity.this, PostsActivity.class);
+                posts.putExtra("Key",ref);
                 startActivity(posts);
                 finish();
             }

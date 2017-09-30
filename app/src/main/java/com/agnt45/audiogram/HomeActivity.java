@@ -50,7 +50,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void sendLoading() {
+    public void sendLoading() {
         Intent Main = new Intent(HomeActivity.this,LoadingActivity.class);
         startActivity(Main);
         finish();
