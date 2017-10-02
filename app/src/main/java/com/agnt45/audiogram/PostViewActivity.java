@@ -1,9 +1,11 @@
 package com.agnt45.audiogram;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ public class PostViewActivity extends AppCompatActivity {
     private DatabaseReference postImgDatabaseReference;
     private DatabaseReference userDatebaseReference;
     private String name,imgurl;
+    private String fileurl,comments,likes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,20 @@ public class PostViewActivity extends AppCompatActivity {
 
             }
         });
+        postImgDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                fileurl = dataSnapshot.child("file1Url").getValue().toString();
+                likes = dataSnapshot.child("like_count").getValue().toString();
+                comments = dataSnapshot.child("comment_count").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        picImage =  (ImageView) findViewById(R.id.pic_post);
         mToolbar = (Toolbar) findViewById(R.id.post_view_layout);
         uToolbar = (Toolbar) findViewById(R.id.post_user_view_layout);
         dp = (CircleImageView) uToolbar.findViewById(R.id.user_dp_post);
@@ -55,6 +72,21 @@ public class PostViewActivity extends AppCompatActivity {
         CommentsCount = (TextView) findViewById(R.id.post_comments);
         dispName.setText(name);
         Picasso.with(PostViewActivity.this).load(imgurl).into(dp);
+        Picasso.with(PostViewActivity.this).load(fileurl).into(picImage);
+        likesCount.setText(likes);
+        CommentsCount.setText(comments);
+        likesCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        CommentsCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
     }
 }
