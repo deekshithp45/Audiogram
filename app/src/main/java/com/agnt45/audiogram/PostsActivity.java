@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import com.agnt45.audiogram.Adapters.PostViewHolder;
 import com.agnt45.audiogram.Classes.Posts;
@@ -58,6 +59,17 @@ public class PostsActivity extends AppCompatActivity {
                         @Override
                         protected void populateViewHolder(PostViewHolder postViewHolder, Posts posts, int i) {
                             postViewHolder.setImage(posts.getFile1Url());
+                            final String post_id = getRef(i).getKey();
+                            postViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent post_view = new Intent(PostsActivity.this,PostViewActivity.class);
+                                    post_view.putExtra("post_KEY",post_id);
+                                    post_view.putExtra("post_USER",uid);
+                                    startActivity(post_view);
+                                    finish();
+                                }
+                            });
                         }
                     };
                     postView.setAdapter(firebaseRecyclerAdapter);

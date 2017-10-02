@@ -6,7 +6,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:id="@+id/user_name_"
+        android:id="@+id/user_dp_post"
         android:src="@drawable/profile_default_pic"
         />
 
