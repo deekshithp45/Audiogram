@@ -6,11 +6,21 @@
     android:layout_height="match_parent"
     tools:context="com.agnt45.audiogram.PostViewActivity">
     <include layout="@layout/app_bar_layout" android:id="@+id/post_view_layout"/>
+
+    <include
+        android:id="@+id/post_user_view_layout"
+        layout="@layout/user_post_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@+id/post_view_layout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:id="@+id/pic_post"
-        android:layout_below="@+id/post_view_layout"
+        android:layout_below="@+id/post_user_view_layout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -21,18 +31,25 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/pic_post"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="14dp"
-        android:text="Likes" />
+        android:text="Likes"
+        android:textSize="20dp"
+        android:textColor="@android:color/black"/>
 
     <TextView
         android:id="@+id/post_comments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/post_likes"
         android:layout_marginLeft="22dp"
         android:layout_marginStart="22dp"
-        android:layout_toEndOf="@+id/post_likes"
+        android:text="Comments"
+        android:layout_alignBaseline="@+id/post_likes"
+        android:layout_alignBottom="@+id/post_likes"
         android:layout_toRightOf="@+id/post_likes"
-        android:text="Comments" />
+        android:layout_toEndOf="@+id/post_likes"
+        android:textSize="20dp"
+        android:textColor="@android:color/black"/>
+
 
 </RelativeLayout>
