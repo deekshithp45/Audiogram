@@ -4,11 +4,16 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.agnt45.audiogram.Adapters.PostLikeUserViewHolder;
+import com.agnt45.audiogram.Classes.Userid;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -80,6 +85,18 @@ public class PostViewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Dialog Like = new Dialog(PostViewActivity.this);
                 Like.setContentView(R.layout.like_dialog);
+                RecyclerView likeview = (RecyclerView) findViewById(R.id.like_view);
+                likeview.setHasFixedSize(true);
+                likeview.setLayoutManager(new LinearLayoutManager(PostViewActivity.this));
+
+                FirebaseRecyclerAdapter<Userid,PostLikeUserViewHolder> likeFirebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Userid, PostLikeUserViewHolder>(
+                        Userid.class,R.layout.user_post_like_layout,PostLikeUserViewHolder.class,postImgDatabaseReference.child("like_list")
+                ) {
+                    @Override
+                    protected void populateViewHolder(PostLikeUserViewHolder postLikeUserViewHolder, Userid userid, int i) {
+                        postLikeUserViewHolder.getuid(userid.getUid());
+                    }
+                };
             }
         });
         CommentsCount.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +104,9 @@ public class PostViewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Dialog comment =  new Dialog(PostViewActivity.this);
                 comment.setContentView(R.layout.comment_dialog);
+                RecyclerView commentview = (RecyclerView) findViewById(R.id.comment_view);
+                commentview.setHasFixedSize(true);
+                commentview.setLayoutManager(new LinearLayoutManager(PostViewActivity.this));
 
             }
         });
