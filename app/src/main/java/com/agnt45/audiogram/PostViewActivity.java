@@ -78,12 +78,15 @@ public class PostViewActivity extends AppCompatActivity {
         likesCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Dialog Like = new Dialog(PostViewActivity.this);
+                Like.setContentView(R.layout.like_dialog);
             }
         });
         CommentsCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Dialog comment =  new Dialog(PostViewActivity.this);
+                comment.setContentView(R.layout.comment_dialog);
 
             }
         });
